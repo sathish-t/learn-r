@@ -1,0 +1,79 @@
+---
+title: "ggplot2 Tutorial From ODSC East"
+author: "Sathish Thiyagarajan"
+date: "May 24, 2016"
+output: html_document
+---
+
+### Simple ggplot2 script
+
+
+Loading ggplot2! We are going to use the diamonds dataset.
+We make a simple plot first.
+
+```{r}
+library(ggplot2)
+library(RColorBrewer)
+data(diamonds)
+plot(price ~ carat, data=diamonds)
+```
+
+Let's make the plot prettier using ggplot2.
+
+```{r}
+ggplot(data=diamonds,aes(x=carat,y=price)) + geom_point(color='red')
+```
+
+Let's now vary the color according to the cut of the diamond
+
+```{r,out.width = '500px', dpi=200}
+ggplot(data=diamonds,aes(x=carat,y=price)) + geom_point(aes(color=cut))
+```
+
+Let's make a histogram of the price now.
+
+```{r}
+ggplot(diamonds) + geom_histogram(aes(x=price),fill='red',binwidth=500)
+```
+
+We can also make a density plot.
+
+```{r}
+ggplot(diamonds) + geom_density(aes(x=price),fill='grey50',color='red')
+```
+
+Making a plot with a smoothing line.
+
+```{r}
+ggplot(diamonds,aes(x=carat,y=price)) + geom_point() + geom_smooth()
+```
+
+Make several lines with multicolor plots.
+
+```{r}
+ggplot(diamonds,aes(x=carat,y=price,color=cut)) + geom_point() + 
+  geom_smooth() + scale_color_brewer(palette="Set1")
+```
+
+If colors are applied later, the lines are changed
+```{r}
+ggplot(diamonds,aes(x=carat,y=price)) + geom_point(aes(color=cut)) + 
+  geom_smooth() + scale_color_brewer(palette="Set1")
+```
+
+Make a group of plots
+```{r}
+ggplot(diamonds,aes(x=carat,y=price)) + geom_point() + 
+  facet_wrap(~cut,ncol=1)
+```
+
+Make a group of histograms
+```{r}
+ggplot(diamonds,aes(x=carat)) + geom_histogram() + facet_wrap(~cut)
+```
+
+Make a group of violins
+```{r}
+ggplot(diamonds,aes(factor(cut),y=price)) +
+  geom_violin() + geom_jitter(width = 0.1) + xlab('cut')
+```
